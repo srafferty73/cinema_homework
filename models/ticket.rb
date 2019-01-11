@@ -7,15 +7,15 @@ attr_accessor :customer_id, :film_id
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
-    @customer_id = options['customer_id'].to_i
-    @film_id = options['film_id'].to_i
+    @customer_id = options['customers_id'].to_i
+    @film_id = options['films_id'].to_i
   end
 
   def save()
     sql = "INSERT INTO tickets
           (
-            customer_id,
-            film_id
+            customers_id,
+            films_id
           )
           VALUES
           (
@@ -23,8 +23,13 @@ attr_accessor :customer_id, :film_id
           )
           RETURNING id"
     values = [@customer_id, @film_id]
-    casting = SqlRunner.run(sql, values).first
-    @id = casting['id'].to_i
+    ticket = SqlRunner.run(sql, values).first
+    @id = ticket['id'].to_i
+  end
+
+  def self.delete_all()
+    sql = "DELETE FROM tickets"
+    SqlRunner.run(sql)
   end
 
 end
