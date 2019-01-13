@@ -53,4 +53,16 @@ attr_accessor :title, :price
     SqlRunner.run(sql, values)
   end
 
+  def customers()
+    sql = "SELECT customers.*
+          FROM customers
+          INNER JOIN tickets
+          ON tickets.customers_id = customers.id
+          WHERE tickets.films_id = $1"
+    values = [@id]
+    customers = SqlRunner.run(sql, values)
+    result = customers.map { |customer| Customer.new (customer)}
+    return result
+  end
+
 end
