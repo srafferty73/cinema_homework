@@ -53,4 +53,24 @@ attr_accessor :customer_id, :film_id
     SqlRunner.run(sql, values)
   end
 
+  ##############
+
+  def buy_tickets()
+    sql = "SELECT * FROM tickets
+          INNER JOIN films ON films.id = tickets.films_id
+          INNER JOIN customers ON customers.id = tickets.customers_id
+          WHERE tickets.id = $1"
+    values = [@id]
+    result = SqlRunner.run(sql, values).first
+    return result['funds'].to_i - result['price'].to_i
+  end
+
+  def update_price()
+    sql = "UPDATE customers
+          SET funds = $1
+          WHERE id = $2"
+    values = [buy_tickets(), @customer_id]
+    SqlRunner.run(sql, values)
+  end
+
 end

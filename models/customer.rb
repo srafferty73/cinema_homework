@@ -65,4 +65,13 @@ attr_accessor :name, :funds
     return result
   end
 
+  def check_tickets()
+    sql = "SELECT customers_id FROM tickets
+          WHERE tickets.customers_id = $1"
+    values = [@id]
+    result = SqlRunner.run(sql, values).first
+    total = result.length
+    return total
+  end
+
 end
